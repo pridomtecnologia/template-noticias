@@ -2,6 +2,65 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { mockArticles, mockGallery, categories, bannerData, siteConfig } from './mock/mockData.js';
 
+// Modal Component
+const Modal = ({ article, isOpen, onClose }) => {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !article) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Fechar modal">
+          ✕
+        </button>
+        
+        <div className="modal-header">
+          <img src={article.image} alt={article.title} className="modal-image" />
+          <div className="modal-header-content">
+            <span className="modal-category">{article.category}</span>
+            <h1 className="modal-title">{article.title}</h1>
+            <div className="modal-meta">
+              <span className="modal-author">Por {article.author}</span>
+              <span className="modal-date">{article.date}</span>
+              <span className="modal-read-time">{article.readTime} de leitura</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal-body">
+          <div className="modal-tags">
+            {article.tags && article.tags.map((tag, index) => (
+              <span key={index} className="modal-tag">#{tag}</span>
+            ))}
+          </div>
+          
+          <div 
+            className="modal-article-content"
+            dangerouslySetInnerHTML={{ __html: article.fullContent }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Header Component
 const Header = ({ isMenuOpen, toggleMenu }) => {
   return (
@@ -51,8 +110,76 @@ const Banner = ({ banner }) => {
   );
 };
 
+// Hero Banner Component (para notícias em destaque)
+const HeroBanner = ({ articles, onReadMore }) => {
+  const heroArticles = articles.slice(0, 3);
+  const mainArticle = heroArticles[0];
+  const sideArticles = heroArticles.slice(1, 3);
+
+  if (!mainArticle) return null;
+
+  return (
+    <section className="hero-banner">
+      <div className="container">
+        <div className="hero-grid">
+          {/* Notícia principal - Lado esquerdo */}
+          <div className="hero-main">
+            <div className="hero-article">
+              <div className="hero-image">
+                <img src={mainArticle.image} alt={mainArticle.title} />
+                <span className="hero-category">{mainArticle.category}</span>
+                <div className="hero-overlay">
+                  <div className="hero-content">
+                    <h2>{mainArticle.title}</h2>
+                    <p>{mainArticle.excerpt}</p>
+                    <div className="hero-meta">
+                      <span className="hero-date">{mainArticle.date}</span>
+                      {/* <a href="#" className="hero-read-more">Leia mais</a> */}
+                       <button 
+                        className="hero-read-more" 
+                        onClick={() => onReadMore(mainArticle)}
+                      >
+                        Leia mais
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Notícias laterais - Lado direito */}
+          <div className="hero-sidebar">
+            {sideArticles.map((article, index) => (
+              <div key={article.id} className="hero-side-article">
+                <div className="hero-side-image">
+                  <img src={article.image} alt={article.title} />
+                  <span className="hero-side-category">{article.category}</span>
+                </div>
+                <div className="hero-side-content">
+                  <h3>{article.title}</h3>
+                  <div className="hero-side-meta">
+                    <span className="hero-side-date">{article.date}</span>
+                    {/* <a href="#" className="hero-side-read-more">Leia mais</a> */}
+                     <button 
+                        className="hero-side-read-more" 
+                        onClick={() => onReadMore(article)}
+                      >
+                        Leia mais
+                      </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // Article Card Component
-const ArticleCard = ({ article, featured = false }) => {
+const ArticleCard = ({ article, featured = false, onReadMore }) => {
   return (
     <article className={`article-card ${featured ? 'featured' : ''}`}>
       <div className="article-image">
@@ -64,7 +191,13 @@ const ArticleCard = ({ article, featured = false }) => {
         <p>{article.excerpt}</p>
         <div className="article-meta">
           <span className="article-date">{article.date}</span>
-          <a href="#" className="read-more">Leia mais</a>
+          {/* <a href="#" className="read-more">Leia mais</a> */}
+           <button 
+                        className="read-more" 
+                        onClick={() => onReadMore(article)}
+                      >
+                        Leia mais
+                      </button>
         </div>
       </div>
     </article>
@@ -72,7 +205,7 @@ const ArticleCard = ({ article, featured = false }) => {
 };
 
 // Featured Section Component
-const FeaturedSection = ({ articles }) => {
+const FeaturedSection = ({ articles, onReadMore  }) => {
   const featuredArticles = articles.filter(article => article.featured);
   const mainArticle = featuredArticles[0];
   const sideArticles = featuredArticles.slice(1, 3);
@@ -85,11 +218,11 @@ const FeaturedSection = ({ articles }) => {
         <h2>Destaques</h2>
         <div className="featured-grid">
           <div className="main-featured">
-            <ArticleCard article={mainArticle} featured={true} />
+            <ArticleCard article={mainArticle} featured={true}  onReadMore={onReadMore}  />
           </div>
           <div className="side-featured">
             {sideArticles.map(article => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.id} article={article} onReadMore={onReadMore}  />
             ))}
           </div>
         </div>
@@ -99,7 +232,7 @@ const FeaturedSection = ({ articles }) => {
 };
 
 // News Grid Component
-const NewsGrid = ({ articles, selectedCategory, onCategoryChange }) => {
+const NewsGrid = ({ articles, selectedCategory, onCategoryChange, onReadMore }) => {
   const filteredArticles = selectedCategory === "Todas" 
     ? articles 
     : articles.filter(article => article.category === selectedCategory);
@@ -121,7 +254,7 @@ const NewsGrid = ({ articles, selectedCategory, onCategoryChange }) => {
         </div>
         <div className="articles-grid">
           {filteredArticles.map(article => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.id} article={article} onReadMore={onReadMore} />
           ))}
         </div>
       </div>
@@ -130,28 +263,28 @@ const NewsGrid = ({ articles, selectedCategory, onCategoryChange }) => {
 };
 
 // Gallery Component
-const Gallery = ({ images }) => {
-  return (
-    <section className="gallery">
-      <div className="container">
-        <h2>Galeria</h2>
-        <div className="gallery-grid">
-          {images.map(image => (
-            <div key={image.id} className="gallery-item">
-              <img src={image.image} alt={image.alt} />
-              <div className="gallery-overlay">
-                <span>Ver mais</span>
-                {image.title && (
-                  <div className="gallery-title">{image.title}</div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+// const Gallery = ({ images }) => {
+//   return (
+//     <section className="gallery">
+//       <div className="container">
+//         <h2>Galeria</h2>
+//         <div className="gallery-grid">
+//           {images.map(image => (
+//             <div key={image.id} className="gallery-item">
+//               <img src={image.image} alt={image.alt} />
+//               <div className="gallery-overlay">
+//                 <span>Ver mais</span>
+//                 {image.title && (
+//                   <div className="gallery-title">{image.title}</div>
+//                 )}
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
 
 // Newsletter Component
 const Newsletter = () => {
@@ -253,6 +386,8 @@ const App = () => {
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [articles] = useState(mockArticles);
   const [loading, setLoading] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -266,6 +401,16 @@ const App = () => {
     setTimeout(() => {
       setLoading(false);
     }, 300);
+  };
+
+    const handleReadMore = (article) => {
+    setSelectedArticle(article);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedArticle(null);
   };
 
   useEffect(() => {
@@ -302,17 +447,20 @@ const App = () => {
       <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       
       {/* Banner Principal */}
-      <Banner banner={bannerData.main} />
+      {/* <Banner banner={bannerData.main} /> */}
       
       <main>
-        <FeaturedSection articles={articles} />
+        {/* Hero Banner com notícias em destaque */}
+        <HeroBanner articles={articles} onReadMore={handleReadMore}/>
+
+        <FeaturedSection articles={articles} onReadMore={handleReadMore} />
         
         {/* Banner Lateral */}
-        <section className="banner-section">
+        {/* <section className="banner-section">
           <div className="container">
             <Banner banner={bannerData.sidebar} />
           </div>
-        </section>
+        </section> */}
         
         {loading ? (
           <div className="loading">Carregando notícias...</div>
@@ -321,14 +469,21 @@ const App = () => {
             articles={articles} 
             selectedCategory={selectedCategory} 
             onCategoryChange={handleCategoryFilter}
+            onReadMore={handleReadMore}
           />
         )}
         
-        <Gallery images={mockGallery} />
+        {/* <Gallery images={mockGallery} /> */}
         <Newsletter />
       </main>
       
       <Footer />
+
+        <Modal 
+        article={selectedArticle} 
+        isOpen={modalOpen} 
+        onClose={closeModal} 
+      />
     </div>
   );
 };
