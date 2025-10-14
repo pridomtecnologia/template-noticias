@@ -21,7 +21,7 @@ export const mockArticles = [
       <p>As principais operadoras do país já iniciaram a implementação da rede, com previsão de cobertura completa das capitais até o final de 2025.</p>
     `,
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop",
-    category: "Tecnologia",
+    // category: "Tecnologia",
     date: "16 Set 2025",
     author: "João Silva",
     readTime: "5 min",
@@ -319,7 +319,7 @@ export const bannerData = {
     alt: "Banner Publicitário Principal"
   },
   sidebar: {
-    image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
+    image: "trump.avif",
     title: "Publicidade - Banner Lateral",
     link: "#",
     alt: "Banner Publicitário Lateral"
