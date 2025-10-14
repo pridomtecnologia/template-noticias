@@ -460,7 +460,6 @@ const Footer = () => {
   );
 };
 
-// Main App Component
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
