@@ -1,6 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { mockArticles, mockGallery, categories, bannerData, siteConfig } from './mock/mockData.js';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { styled, alpha } from '@mui/material/styles';
+import ArticleIcon from '@mui/icons-material/Article';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import FacebookIcon from '@mui/icons-material/Facebook';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: '#ffffff',
+  width: '100%',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 // Modal Component
 const Modal = ({ article, isOpen, onClose }) => {
@@ -69,18 +121,31 @@ const Header = ({ isMenuOpen, toggleMenu }) => {
         <div className="header-content">
           <div className="logo">
             <h1>{siteConfig.siteName}</h1>
-            <span>{siteConfig.siteSlogan}</span>
+            {/* <span>{siteConfig.siteSlogan}</span> */}
           </div>
           
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
             <ul>
-              <li><a href="#home">Início</a></li>
-              <li><a href="#noticias">Notícias</a></li>
-              <li><a href="#economia">Economia</a></li>
-              <li><a href="#esportes">Esportes</a></li>
-              <li><a href="#cultura">Cultura</a></li>
-              <li><a href="#galeria">Galeria</a></li>
-              <li><a href="#contato">Contato</a></li>
+              <li><a href="#home">INÍCIO</a></li>
+              <li><a href="#esportes">POLÍTICA</a></li>
+              <li><a href="#esportes">ESPORTES</a></li>
+              <li><a href="#noticias">NOTÍCIAS</a></li>
+              <li><a href="#economia">ECONOMIA</a></li>
+              <li><a href="#cultura">CULTURA</a></li>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon sx={{color: '#ffffff'}} />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Pesquisar..."
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search>
+              <Box sx={{display: 'flex', alignItems: 'center', gap: '7px'}}>
+                <FacebookIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+                <InstagramIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+                <YouTubeIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+              </Box>
             </ul>
           </nav>
 
@@ -100,11 +165,25 @@ const Header = ({ isMenuOpen, toggleMenu }) => {
 };
 
 // Banner Component
+// const Banner = ({ banner }) => {
+//   return (
+//     <div className="banner">
+//       <a href={banner.link} target="_blank" rel="noopener noreferrer">
+//         <img src={banner.image} alt={banner.alt} />
+//       </a>
+//     </div>
+//   );
+// };
+
 const Banner = ({ banner }) => {
   return (
     <div className="banner">
       <a href={banner.link} target="_blank" rel="noopener noreferrer">
         <img src={banner.image} alt={banner.alt} />
+        <div className="banner-overlay">
+          <h2>Trump assina acordo de cessar-fogo em Gaza</h2>
+          <p>{banner.description}</p>
+        </div>
       </a>
     </div>
   );
@@ -135,12 +214,16 @@ const HeroBanner = ({ articles, onReadMore }) => {
                     <div className="hero-meta">
                       <span className="hero-date">{mainArticle.date}</span>
                       {/* <a href="#" className="hero-read-more">Leia mais</a> */}
-                       <button 
+                       {/* <button 
                         className="hero-read-more" 
                         onClick={() => onReadMore(mainArticle)}
                       >
                         Leia mais
-                      </button>
+                      </button> */}
+                      <div  className="hero-read-more" 
+                        onClick={() => onReadMore(mainArticle)}>
+                        <Button variant="contained"><ArticleIcon sx={{ mr: 1 }}/>  Leia sobre a notícia</Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -184,20 +267,25 @@ const ArticleCard = ({ article, featured = false, onReadMore }) => {
     <article className={`article-card ${featured ? 'featured' : ''}`}>
       <div className="article-image">
         <img src={article.image} alt={article.title} />
-        <span className="article-category">{article.category}</span>
+        {/* <span className="article-category">{article.category}</span> */}
       </div>
       <div className="article-content">
         <h3>{article.title}</h3>
         <p>{article.excerpt}</p>
         <div className="article-meta">
-          <span className="article-date">{article.date}</span>
+          {/* <span className="article-date">{article.date}</span> */}
           {/* <a href="#" className="read-more">Leia mais</a> */}
-           <button 
-                        className="read-more" 
-                        onClick={() => onReadMore(article)}
-                      >
-                        Leia mais
-                      </button>
+           {/* <button 
+            className="read-more" 
+            onClick={() => onReadMore(article)}
+          >
+            Leia mais
+          </button> */}
+          <div  className="read-more" 
+            onClick={() => onReadMore(article)}>
+            <Button variant="contained"><ArticleIcon sx={{ mr: 1 }}/>  Leia sobre a notícia</Button>
+          </div>
+          
         </div>
       </div>
     </article>
@@ -240,8 +328,8 @@ const NewsGrid = ({ articles, selectedCategory, onCategoryChange, onReadMore }) 
   return (
     <section className="news-grid">
       <div className="container">
-        <h2>Últimas Notícias</h2>
-        <div className="category-filter">
+        {/* <h2>Últimas Notícias</h2> */}
+        {/* <div className="category-filter">
           {categories.map(category => (
             <button
               key={category}
@@ -251,7 +339,7 @@ const NewsGrid = ({ articles, selectedCategory, onCategoryChange, onReadMore }) 
               {category}
             </button>
           ))}
-        </div>
+        </div> */}
         <div className="articles-grid">
           {filteredArticles.map(article => (
             <ArticleCard key={article.id} article={article} onReadMore={onReadMore} />
@@ -285,6 +373,7 @@ const NewsGrid = ({ articles, selectedCategory, onCategoryChange, onReadMore }) 
 //     </section>
 //   );
 // };
+
 
 // Newsletter Component
 const Newsletter = () => {
@@ -329,64 +418,54 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h4>{siteConfig.siteName}</h4>
-            <p>{siteConfig.siteSlogan}</p>
-            <div className="social-links">
-              <a href={siteConfig.social.facebook} aria-label="Facebook">📘</a>
-              <a href={siteConfig.social.twitter} aria-label="Twitter">🐦</a>
-              <a href={siteConfig.social.instagram} aria-label="Instagram">📷</a>
-              <a href={siteConfig.social.linkedin} aria-label="LinkedIn">💼</a>
-            </div>
+            {/* <p>{siteConfig.siteSlogan}</p> */}
           </div>
           <div className="footer-section">
-            <h4>Seções</h4>
+            {/* <h4>Seções</h4>
             <ul>
-              <li><a href="#politica">Política</a></li>
-              <li><a href="#economia">Economia</a></li>
-              <li><a href="#esportes">Esportes</a></li>
-              <li><a href="#cultura">Cultura</a></li>
-              <li><a href="#tecnologia">Tecnologia</a></li>
-              <li><a href="#saude">Saúde</a></li>
-            </ul>
+              <li><a href="#esportes">POLÍTICA</a></li>
+              <li><a href="#esportes">ESPORTES</a></li>
+              <li><a href="#noticias">NOTÍCIAS</a></li>
+              <li><a href="#economia">ECONOMIA</a></li>
+              <li><a href="#cultura">CULTURA</a></li>
+            </ul> */}
           </div>
+        
           <div className="footer-section">
-            <h4>Institucional</h4>
-            <ul>
-              <li><a href="#sobre">Sobre nós</a></li>
-              <li><a href="#equipe">Nossa equipe</a></li>
-              <li><a href="#anuncie">Anuncie conosco</a></li>
-              <li><a href="#politica-privacidade">Política de Privacidade</a></li>
-              <li><a href="#termos">Termos de Uso</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Contato</h4>
-            <p>{siteConfig.contact.email}</p>
-            <p>{siteConfig.contact.phone}</p>
-            <p>Av. Paulista, 1000 - São Paulo/SP</p>
-            <p>CEP: 01310-100</p>
+            <p>&copy; 2025 {siteConfig.siteName}. Todos os direitos reservados.</p>
+            
+            {/* <p>Av. Paulista, 1000 - São Paulo/SP</p>
+            <p>CEP: 01310-100</p> */}
           </div>
         </div>
         
         {/* Banner do rodapé */}
         <div className="footer-banner">
-          <Banner banner={bannerData.footer} />
         </div>
         
-        <div className="footer-bottom">
-          <p>&copy; 2025 {siteConfig.siteName}. Todos os direitos reservados.</p>
+        <div className="footer-bottom" style={{display: 'flex', justifyContent: 'space-between', gap: '10px'}}>
+          <div style={{display: 'flex', gap: '10px', color: '#ffffff'}}>
+            <p>Privacidade</p>
+            <p>|</p>
+            <p>Termos e Condições de Uso</p>
+          </div>
+          <div style={{display: 'flex', gap: '10px'}}>
+            <FacebookIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+            <InstagramIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+            <YouTubeIcon sx={{color: '#ffffff', cursor: 'pointer'}} />
+          </div>
         </div>
       </div>
     </footer>
   );
 };
 
-// Main App Component
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [articles] = useState(mockArticles);
   const [loading, setLoading] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   const toggleMenu = () => {
@@ -448,20 +527,24 @@ const App = () => {
       
       {/* Banner Principal */}
       {/* <Banner banner={bannerData.main} /> */}
+      <section className="banner-section">
+        <div className="container">
+          <Banner banner={bannerData.sidebar} />
+        </div>
+      </section>
       
       <main>
-        {/* Hero Banner com notícias em destaque */}
-        <HeroBanner articles={articles} onReadMore={handleReadMore}/>
-
-        <FeaturedSection articles={articles} onReadMore={handleReadMore} />
         
-        {/* Banner Lateral */}
-        {/* <section className="banner-section">
+        <section className="banner-section">
           <div className="container">
-            <Banner banner={bannerData.sidebar} />
+            <h1>Moraes citou risco de fuga como principal motivo para manter prisão de Bolsonaro</h1>
           </div>
-        </section> */}
-        
+
+          <div className="container">
+            <Button variant="contained"><ArticleIcon sx={{ mr: 1 }}/>  Leia sobre a notícia</Button>
+          </div>
+        </section>
+
         {loading ? (
           <div className="loading">Carregando notícias...</div>
         ) : (
@@ -472,14 +555,37 @@ const App = () => {
             onReadMore={handleReadMore}
           />
         )}
+
+        {/* Hero Banner com notícias em destaque */}
+        {/* <HeroBanner articles={articles} onReadMore={handleReadMore}/>
+
+        <FeaturedSection articles={articles} onReadMore={handleReadMore} /> */}
+        
+        {/* Banner Lateral */}
+        {/* <section className="banner-section">
+          <div className="container">
+            <Banner banner={bannerData.sidebar} />
+          </div>
+        </section> */}
+        
+        {/* {loading ? (
+          <div className="loading">Carregando notícias...</div>
+        ) : (
+          <NewsGrid 
+            articles={articles} 
+            selectedCategory={selectedCategory} 
+            onCategoryChange={handleCategoryFilter}
+            onReadMore={handleReadMore}
+          />
+        )} */}
         
         {/* <Gallery images={mockGallery} /> */}
-        <Newsletter />
+        {/* <Newsletter /> */}
       </main>
       
       <Footer />
 
-        <Modal 
+      <Modal 
         article={selectedArticle} 
         isOpen={modalOpen} 
         onClose={closeModal} 
