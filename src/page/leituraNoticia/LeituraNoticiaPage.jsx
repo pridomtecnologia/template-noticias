@@ -69,13 +69,11 @@ const Modal = ({ article, isOpen, onClose }) => {
 const Banner = ({ banner }) => {
   return (
     <div className="banner">
-      <a href={banner.link} target="_blank" rel="noopener noreferrer">
-        <img src='lula.avif' alt={banner.alt} />
-        <div className="banner-overlay">
-          <h2>'Não pintou química, pintou uma indústria petroquímica’</h2>
-          {/* <p>{banner.description}</p> */}
-        </div>
-      </a>
+      <img src='lula.avif' alt={banner.alt} />
+      <div className="banner-overlay">
+        <h2>'Não pintou química, pintou uma indústria petroquímica’</h2>
+        {/* <p>{banner.description}</p> */}
+      </div>
     </div>
   );
 };
@@ -412,6 +410,8 @@ const LeituraNoticiaPage = () => {
         <section className="banner-section">
           <div className="container">
             <h1>Presidente relembrou encontro com líder norte-americano durante a Assembleia Geral das Nações Unidas</h1>
+            <p>Por Luiz, HB da notícia — Bahia</p>
+            <p>14/10/2025 15h20</p>
           </div>
 
           <div className="container">

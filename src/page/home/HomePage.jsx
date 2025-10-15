@@ -72,9 +72,11 @@ const Modal = ({ article, isOpen, onClose }) => {
 }
 
 const Banner = ({ banner }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="banner">
-      <a href={banner.link} target="_blank" rel="noopener noreferrer">
+    <div className="banner" style={{cursor: 'pointer'}}>
+      <a onClick={() => navigate('/leitura')} rel="noopener noreferrer">
         <img src={banner.image} alt={banner.alt} />
         <div className="banner-overlay">
           <h2>Trump assina acordo de cessar-fogo em Gaza</h2>
@@ -159,7 +161,7 @@ const HeroBanner = ({ articles, onReadMore }) => {
 
 const ArticleCard = ({ article, onReadMore }) => {
   const navigate = useNavigate();
-
+  
   return (
     <div className="news-card" onClick={() => navigate('/leitura')}>
       <div className="news-card-image">
