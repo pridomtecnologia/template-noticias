@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
 import { mockArticles, mockGallery, categories, bannerData, siteConfig } from '../../mock/mockData.js';
-import Button from '@mui/material/Button';
-import ArticleIcon from '@mui/icons-material/Article';
-
-import InstagramIcon from '@mui/icons-material/Instagram';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { useNavigate  } from 'react-router-dom';
 import HeaderComponent from '../../componentes/header/HeaderComponent';
 import FooterComponent from '../../componentes/footer/FooterComponent';
-import { Margin } from '@mui/icons-material';
 
 // Modal Component
 const Modal = ({ article, isOpen, onClose }) => {
@@ -89,6 +83,8 @@ const HeroBanner = ({ articles, onReadMore }) => {
   const heroArticles = articles.slice(0, 3);
   const mainArticle = heroArticles[0];
   const sideArticles = heroArticles.slice(1, 3);
+  const navigate = useNavigate();
+  
 
   if (!mainArticle) return null;
 
@@ -98,7 +94,7 @@ const HeroBanner = ({ articles, onReadMore }) => {
         <div className="hero-grid">
           
           {/* Notícia principal - Lado esquerdo */}
-          <div className="hero-main">
+          <div className="hero-main" style={{cursor: 'pointer'}} onClick={() => navigate('/leitura')}>
             <div className="hero-article">
               <div className="hero-image">
                 <img src={mainArticle.image} alt={mainArticle.title} />
@@ -115,7 +111,7 @@ const HeroBanner = ({ articles, onReadMore }) => {
           </div>
 
           {/* Notícias laterais - Lado direito */}
-          <div className="hero-sidebar">
+          <div className="hero-sidebar" style={{cursor: 'pointer'}} onClick={() => navigate('/leitura')}>
             {sideArticles.map((article, index) => (
               <div key={article.id} className="hero-side-article">
                 <div className="hero-side-image">
@@ -125,13 +121,6 @@ const HeroBanner = ({ articles, onReadMore }) => {
                   <h3>{article.title}</h3>
                   <div className="hero-side-meta">
                     <span className="hero-side-date">{article.date}</span>
-                    {/* <a href="#" className="hero-side-read-more">Leia mais</a> */}
-                     <button 
-                        className="hero-side-read-more" 
-                        onClick={() => onReadMore(article)}
-                      >
-                        Leia mais
-                      </button>
                   </div>
                 </div>
               </div>
@@ -144,8 +133,10 @@ const HeroBanner = ({ articles, onReadMore }) => {
 };
 
 const ArticleCard = ({ article, onReadMore }) => {
+  const navigate = useNavigate();
+  
   return (
-    <div className="news-card" onClick={() => onReadMore(article)}>
+    <div className="news-card" onClick={() => navigate('/leitura')}>
       <div className="news-card-image">
         <img src={article.image} alt={article.title} />
       </div>
@@ -298,9 +289,9 @@ const NoticiaPage = () => {
       <HeaderComponent isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
 
       <div className="banner" style={{margin: 0}}>
-        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=200&fit=crop" alt='' style={{height: '100%'}} />
+        <img src="Buzeira-armas.webp" alt='' style={{width: '100%', height: '60vh'}} />
         <div className="banner-overlay" style={{textAlign: 'center'}}>
-          <h2>NOTICIA</h2>
+          <h2>Buzeira recorreu a “Neymar do PCC” em conflito sobre Lamborghini</h2>
         </div>
       </div>
 
