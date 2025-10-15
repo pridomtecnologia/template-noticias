@@ -41,7 +41,7 @@ button {
 
 /* Header */
 .header {
-  background: #1976D2;
+  background-color: #dddee0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
@@ -74,18 +74,19 @@ button {
   align-items: center;
   list-style: none;
   gap: 2rem;
+  /* background-color: #dddee0; */
 }
 
 .nav a {
   font-weight: 500;
-  color: #ffffff;
+  color: #5e5e5e;
   padding: 0.5rem 0;
   position: relative;
   transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  color: #ffffff;
+  color: #b1a8a8;
 }
 
 .nav a::after {
@@ -95,7 +96,7 @@ button {
   left: 0;
   width: 0;
   height: 2px;
-  background: #ffffff;
+  background: #b1a8a8;
   transition: width 0.3s ease;
 }
 
@@ -306,7 +307,7 @@ button {
   color: #2980b9;
 }
 
-/* .banner {
+.banner {
   margin: 2rem 0;
 }
 
@@ -322,7 +323,7 @@ button {
 
 .banner-section {
   margin: 3rem 0;
-}*/
+}
 
 .banner {
   position: relative;
@@ -675,7 +676,7 @@ button {
 
 /* Footer */
 .footer {
-  background: #1976D2;
+  background: #dddee0;
   color: white;
   padding: 3rem 0 1rem;
 }
@@ -1221,4 +1222,64 @@ button {
   .gallery h2 {
     font-size: 1.3rem;
   }
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Card individual */
+.news-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.news-card:hover {
+  background-color: #f7f7f7;
+  transform: translateY(-2px);
+}
+
+/* Imagem lateral */
+.news-card-image {
+  flex-shrink: 0;
+  width: 140px;
+  height: 90px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.news-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Conteúdo textual */
+.news-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card-content h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+}
+
+.news-card-content p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0;
 }
